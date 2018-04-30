@@ -49,10 +49,13 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
+
+import core.Task;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 
-public class Cliente
+public class Cliente extends Task
 {
 	public static final String BLOWFISH = "BLOWFISH";
 	public static final String AES = "AES";
@@ -61,6 +64,9 @@ public class Cliente
 	public static final String HMACSHA1 = "HMACSHA1";
 	public static final String HMACSHA256 = "HMACSHA256";
 	private final static String PADDING="/ECB/PKCS5Padding";
+	private static int startTime=0;
+	private static int FinalTime=0;
+	
 	static CertificadorYHex certificador = new CertificadorYHex();
 	static Cifrador cifrador = new Cifrador();
 
@@ -70,22 +76,32 @@ public class Cliente
 
 		while(true) {
 			String op = "";
-			String info[] = new String[4];
+			/*String info[] = new String[4];
 			System.out.println("-----------------------------// Cliente Distribuidor //---------------");
 			System.out.println("Eliga el tipo de Servidor con el que se va a conectar:");
 			System.out.println("1. Con Cifrado");
 			System.out.println("2. Sin Cifrado");
 			System.out.println("3. CERRAR PROGRAMA");
-			op = br.readLine();
+			op = br.readLine();*/
+			op="1";
 			if(op.equals("1")) {
-				info = menuCifrado(br);
-				conCifrado(info[1], info[2], info[3], info[0]);
+				//info = menuCifrado(br);
+				//conCifrado(info[1], info[2], info[3], info[0]);
+				//conCifrado("AES", "RSA", "HMACMD5", "HOLA");
+				System.out.println("escriba el numero de transacciones");
+				String trans = br.readLine();
+				System.out.println("escriba el tiempo de demora entre transacción");
+				String tempo = br.readLine();
+				
+				int nTrans = Integer.parseInt(trans);
+				int mS = Integer.parseInt(tempo);
+				Generator gen = new Generator(nTrans , mS);
 				System.out.println("El proceso de envio termino");
 				System.out.println("Enter para volver al menu");
 				br.readLine();
 			}else if (op.equals("2")) {
-				info = menuCifrado(br);
-				sinCifrado(info[1], info[2], info[3], info[0]);
+				//info = menuCifrado(br);
+				//sinCifrado(info[1], info[2], info[3], info[0]);
 				System.out.println("El proceso de envio termino");
 				System.out.println("Enter para volver al menu");
 				br.readLine();
@@ -148,7 +164,7 @@ public class Cliente
 		Socket socketCliente = null;
 		PrintWriter escritor = null;
 		BufferedReader lector = null;
-		String ip ="127.0.0.1";
+		String ip ="localhost";
 		String comunicacion= null;
 		X509Certificate servidorCert= null;
 		KeyPair llaveAsimetrica = null;
@@ -157,6 +173,7 @@ public class Cliente
 
 		//Definicion del socket y sus canales de escritura y lectura.
 		try {
+			
 			socketCliente = new Socket(ip, 1027);
 			escritor = new PrintWriter(socketCliente.getOutputStream(), true);
 			lector = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
@@ -174,7 +191,7 @@ public class Cliente
 			boolean ejecutar = true;
 			while (ejecutar && fases <=5 )
 			{
-				System.out.println("Fase: " + fases);
+				//System.out.println("Fase: " + fases);
 				//Envia el mensaje HOLA
 				if(fases==0 )
 				{
@@ -281,7 +298,7 @@ public class Cliente
 		Socket socketCliente = null;
 		PrintWriter escritor = null;
 		BufferedReader lector = null;
-		String ip ="127.0.0.1";
+		String ip ="157.253.202.29";
 		String comunicacion= null;
 		X509Certificate servidorCert= null;
 		KeyPair llaveAsimetrica = null;
@@ -307,7 +324,7 @@ public class Cliente
 			boolean ejecutar = true;
 			while (ejecutar && fases <=5 )
 			{
-				System.out.println("Fase: " + fases);
+				//System.out.println("Fase: " + fases);
 				//Envia el mensaje HOLA
 				if(fases==0 )
 				{
@@ -404,6 +421,24 @@ public class Cliente
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+	}
+
+	@Override
+	public void fail() {
+		// TODO Auto-generated method stub
+		System.out.println("FAIL_TEST");
+	}
+
+	@Override
+	public void success() {
+		// TODO Auto-generated method stub
+		System.out.println("OK_TEST");
+	}
+
+	@Override
+	public void execute() {
+		conCifrado("AES", "RSA", "HMACMD5", "HOLA");
 		
 	}
 
