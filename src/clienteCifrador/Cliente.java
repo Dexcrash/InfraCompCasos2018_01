@@ -244,7 +244,7 @@ public class Cliente extends Task
 							escritor.println(fromUser);
 							fases++;
 						}
-					}catch (CertificateException ce) {
+					}catch (Exception ce) {
 						fromUser="ESTADO:ERROR";
 						escritor.println(fromUser);
 						ejecutar= false;

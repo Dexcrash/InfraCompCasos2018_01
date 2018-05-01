@@ -49,12 +49,19 @@ package core;
 /*    */ 
 /*    */   public void run()
 /*    */   {
+			try {
+				
+			
 /* 50 */     if (this.sync)
 /*    */     {
 /* 52 */       waitUntil();
 /*    */     }
 /* 54 */     this.command.execute();
 /* 55 */     System.out.println("[LoadUnit " + this.id + "] [Executed at: " + new Date(System.currentTimeMillis()) + "]");
+			} catch(Exception e) 
+			{
+				
+			}
 /*    */   }
 /*    */   
 /*    */ 
